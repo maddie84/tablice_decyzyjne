@@ -1,5 +1,5 @@
 licznik_wartosci = {}
-
+ilosc_lini = 0
 with open('gielda.txt', 'r') as plik:
     # Iterujemy przez linie w pliku
     for linia in plik:
@@ -16,7 +16,7 @@ with open('gielda.txt', 'r') as plik:
                 # Jeśli nie, dodajemy nowy klucz do słownika
                 licznik_wartosci[wartosc] = 1
 
+        ilosc_lini += 1
+
 for klucz, wartosc in licznik_wartosci.items():
     print(f"{klucz}: {wartosc}")
-
-print(licznik_wartosci)
