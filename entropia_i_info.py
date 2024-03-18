@@ -3,31 +3,24 @@ import math
 from prettytable import PrettyTable
 
 # Wczytaj dane z pliku tekstowego
-nazwa_pliku = "gielda.txt"
+nazwa_pliku = "test.txt"
 
 with open(nazwa_pliku, 'r') as plik:
     linie = plik.readlines()
 
 # wstawia pierwszy wiersz jako naglowki kolumn
-linie.insert(0, "a1,a2,a3,decision\n")
+linie.insert(0, "a1,a2,a3,a4,a5\n")
 
 # Rozdziel dane na wiersze i kolumny - tworzy listę dane zawierającą wiersze, gdzie każdy wiersz jest listą kolumn
 dane = [wiersz.strip().split(',') for wiersz in linie]
 
-# Pobierz indeks kolumny "decision" pierwszego wiersza (dane[0])
-indeks_decision = dane[0].index('decision')
-
-# Pobierz dane z kolumny "decision" (bez pierwszego wiersza, który zawiera nagłówki)
-decyzje = [wiersz[indeks_decision] for wiersz in dane[1:]]
-
-indeks_a1 = dane[0].index('a1')
-a1 = [wiersz[indeks_a1] for wiersz in dane[1:]]
-
-indeks_a2 = dane[0].index('a2')
-a2 = [wiersz[indeks_a2] for wiersz in dane[1:]]
-
-indeks_a3 = dane[0].index('a3')
-a3 = [wiersz[indeks_a3] for wiersz in dane[1:]]
+ind = 0
+atr = 0
+diction = {}
+for i in dane[0]:
+    ind = dane[0].index(i)
+    atr = [wiersz[ind] for wiersz in dane[1:]]
+    diction[f'a{ind + 1}'] = atr
 
 def obliczenie_entropii(data):
     total_count = len(data) # ilosc wszystkich decyzji
@@ -76,25 +69,20 @@ def gainratio(przyrost, splitinfo):
 # print("\nDane:")
 # print(tabela)
 
-# Oblicz entropię dla kolumny "decision"
-entropia = obliczenie_entropii(decyzje)
+entropia = obliczenie_entropii(diction['a5'])
 print(f"\nEntropia: {entropia:.4f}")
 
-indeks_a1 = dane[0].index('a1')
-indeks_a2 = dane[0].index('a2')
-indeks_a3 = dane[0].index('a3')
-
-info_a1 = oblicz_info_atrybutu([wiersz[indeks_a1] for wiersz in dane[1:]], decyzje)
-info_a2 = oblicz_info_atrybutu([wiersz[indeks_a2] for wiersz in dane[1:]], decyzje)
-info_a3 = oblicz_info_atrybutu([wiersz[indeks_a3] for wiersz in dane[1:]], decyzje)
+info_a1 = oblicz_info_atrybutu(diction['a1'], diction['a5'])
+info_a2 = oblicz_info_atrybutu(diction['a2'], diction['a5'])
+info_a3 = oblicz_info_atrybutu(diction['a3'], diction['a5'])
 
 gain_a1 = obliczenie_przyrostu(entropia,info_a1)
 gain_a2 = obliczenie_przyrostu(entropia,info_a2)
 gain_a3 = obliczenie_przyrostu(entropia,info_a3)
 
-splitinfo_a1 = obliczenie_entropii(a1)
-splitinfo_a2 = obliczenie_entropii(a2)
-splitinfo_a3 = obliczenie_entropii(a3)
+splitinfo_a1 = obliczenie_entropii(diction['a1'])
+splitinfo_a2 = obliczenie_entropii(diction['a2'])
+splitinfo_a3 = obliczenie_entropii(diction['a3'])
 
 gainratio_a1 = gainratio(gain_a1,splitinfo_a1)
 gainratio_a2 = gainratio(gain_a2,splitinfo_a2)
