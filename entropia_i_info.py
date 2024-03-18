@@ -20,6 +20,15 @@ indeks_decision = dane[0].index('decision')
 # Pobierz dane z kolumny "decision" (bez pierwszego wiersza, który zawiera nagłówki)
 decyzje = [wiersz[indeks_decision] for wiersz in dane[1:]]
 
+indeks_a1 = dane[0].index('a1')
+a1 = [wiersz[indeks_a1] for wiersz in dane[1:]]
+
+indeks_a2 = dane[0].index('a2')
+a2 = [wiersz[indeks_a2] for wiersz in dane[1:]]
+
+indeks_a3 = dane[0].index('a3')
+a3 = [wiersz[indeks_a3] for wiersz in dane[1:]]
+
 def obliczenie_entropii(data):
     total_count = len(data) # ilosc wszystkich decyzji
     class_counts = Counter(data) # counter zlicza wystąpienia unikalnych elementow w liscie data ktora zawiera decyzje
@@ -51,20 +60,26 @@ def oblicz_info_atrybutu(atrybuty, decyzje): #bierze tylko wartosci z kolumny at
 
     return info_atrybutu
 
-# Utwórz PrettyTable i dodaj kolumny
-tabela = PrettyTable(dane[0])
-for wiersz in dane[1:]:
-    tabela.add_row(wiersz)
+def obliczenie_przyrostu(entropia, info):
+    przyrost = entropia - info
+    return przyrost
 
-# Wyświetl wynik w formie tabeli
-print("\nDane:")
-print(tabela)
+def gainratio(przyrost, splitinfo):
+    return przyrost/splitinfo
+
+# # Utwórz PrettyTable i dodaj kolumny
+# tabela = PrettyTable(dane[0])
+# for wiersz in dane[1:]:
+#     tabela.add_row(wiersz)
+
+# # Wyświetl wynik w formie tabeli
+# print("\nDane:")
+# print(tabela)
 
 # Oblicz entropię dla kolumny "decision"
 entropia = obliczenie_entropii(decyzje)
 print(f"\nEntropia: {entropia:.4f}")
 
-# Oblicz informacje atrybutów a1, a2, a3
 indeks_a1 = dane[0].index('a1')
 indeks_a2 = dane[0].index('a2')
 indeks_a3 = dane[0].index('a3')
@@ -73,7 +88,19 @@ info_a1 = oblicz_info_atrybutu([wiersz[indeks_a1] for wiersz in dane[1:]], decyz
 info_a2 = oblicz_info_atrybutu([wiersz[indeks_a2] for wiersz in dane[1:]], decyzje)
 info_a3 = oblicz_info_atrybutu([wiersz[indeks_a3] for wiersz in dane[1:]], decyzje)
 
+gain_a1 = obliczenie_przyrostu(entropia,info_a1)
+gain_a2 = obliczenie_przyrostu(entropia,info_a2)
+gain_a3 = obliczenie_przyrostu(entropia,info_a3)
+
+splitinfo_a1 = obliczenie_entropii(a1)
+splitinfo_a2 = obliczenie_entropii(a2)
+splitinfo_a3 = obliczenie_entropii(a3)
+
+gainratio_a1 = gainratio(gain_a1,splitinfo_a1)
+gainratio_a2 = gainratio(gain_a2,splitinfo_a2)
+gainratio_a3 = gainratio(gain_a3,splitinfo_a3)
+
 # Wyświetl wyniki
-print(f"Info(a1,T):{info_a1:.4f}")
-print(f"Info(a2,T):{info_a2:.4f}")
-print(f"Info(a3,T):{info_a3:.4f}")
+print(f"Info(a1,T): {info_a1:.4f}, Gain(a1,T): {gain_a1}, GainRatio: {gainratio_a1}")
+print(f"Info(a2,T): {info_a2:.4f}, Gain(a2,T): {gain_a2}, GainRatio: {gainratio_a2}")
+print(f"Info(a3,T): {info_a3:.4f}, Gain(a3,T): {gain_a3}, GainRatio: {gainratio_a3}")
