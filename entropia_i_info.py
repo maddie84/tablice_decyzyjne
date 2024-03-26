@@ -1,26 +1,23 @@
 from collections import Counter
 import math
-from prettytable import PrettyTable
 
-# Wczytaj dane z pliku tekstowego
-nazwa_pliku = "test.txt"
+def wczytaj_dane(nazwa_pliku):
+    with open(nazwa_pliku, 'r') as plik:
+        linie = plik.readlines()
+        
+    # wstawia pierwszy wiersz jako naglowki kolumn
+    linie.insert(0, "a1,a2,a3,a4\n")
 
-with open(nazwa_pliku, 'r') as plik:
-    linie = plik.readlines()
+    # Rozdziel dane na wiersze i kolumny - tworzy listę dane zawierającą wiersze, gdzie każdy wiersz jest listą kolumn
+    dane = [wiersz.strip().split(',') for wiersz in linie]
 
-# wstawia pierwszy wiersz jako naglowki kolumn
-linie.insert(0, "a1,a2,a3,a4,a5\n")
+    # Słownik z kolumnami
+    diction = {}
+    for i, kolumna in enumerate(dane[0]):
+        diction[f'a{i + 1}'] = [wiersz[i] for wiersz in dane[1:]]
+    
+    return diction
 
-# Rozdziel dane na wiersze i kolumny - tworzy listę dane zawierającą wiersze, gdzie każdy wiersz jest listą kolumn
-dane = [wiersz.strip().split(',') for wiersz in linie]
-
-ind = 0
-atr = 0
-diction = {}
-for i in dane[0]:
-    ind = dane[0].index(i)
-    atr = [wiersz[ind] for wiersz in dane[1:]]
-    diction[f'a{ind + 1}'] = atr
 
 def obliczenie_entropii(data):
     total_count = len(data) # ilosc wszystkich decyzji
@@ -60,35 +57,3 @@ def obliczenie_przyrostu(entropia, info):
 def gainratio(przyrost, splitinfo):
     return przyrost/splitinfo
 
-# # Utwórz PrettyTable i dodaj kolumny
-# tabela = PrettyTable(dane[0])
-# for wiersz in dane[1:]:
-#     tabela.add_row(wiersz)
-
-# # Wyświetl wynik w formie tabeli
-# print("\nDane:")
-# print(tabela)
-
-entropia = obliczenie_entropii(diction['a5'])
-print(f"\nEntropia: {entropia:.4f}")
-
-info_a1 = oblicz_info_atrybutu(diction['a1'], diction['a5'])
-info_a2 = oblicz_info_atrybutu(diction['a2'], diction['a5'])
-info_a3 = oblicz_info_atrybutu(diction['a3'], diction['a5'])
-
-gain_a1 = obliczenie_przyrostu(entropia,info_a1)
-gain_a2 = obliczenie_przyrostu(entropia,info_a2)
-gain_a3 = obliczenie_przyrostu(entropia,info_a3)
-
-splitinfo_a1 = obliczenie_entropii(diction['a1'])
-splitinfo_a2 = obliczenie_entropii(diction['a2'])
-splitinfo_a3 = obliczenie_entropii(diction['a3'])
-
-gainratio_a1 = gainratio(gain_a1,splitinfo_a1)
-gainratio_a2 = gainratio(gain_a2,splitinfo_a2)
-gainratio_a3 = gainratio(gain_a3,splitinfo_a3)
-
-# Wyświetl wyniki
-print(f"Info(a1,T): {info_a1:.4f}, Gain(a1,T): {gain_a1}, GainRatio: {gainratio_a1}")
-print(f"Info(a2,T): {info_a2:.4f}, Gain(a2,T): {gain_a2}, GainRatio: {gainratio_a2}")
-print(f"Info(a3,T): {info_a3:.4f}, Gain(a3,T): {gain_a3}, GainRatio: {gainratio_a3}")
