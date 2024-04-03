@@ -18,6 +18,14 @@ def wczytaj_dane(nazwa_pliku):
     
     return diction
 
+def wczytaj_dane1(nazwa_pliku):
+    with open(nazwa_pliku, 'r') as plik:
+        linie = plik.readlines()
+
+    # Rozdziel dane na wiersze i kolumny - tworzy listę dane zawierającą wiersze, gdzie każdy wiersz jest listą kolumn
+    dane = [wiersz.strip().split(',') for wiersz in linie]
+    
+    return dane
 
 def obliczenie_entropii(data):
     total_count = len(data) # ilosc wszystkich decyzji

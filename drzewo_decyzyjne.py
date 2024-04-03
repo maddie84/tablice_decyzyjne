@@ -1,90 +1,76 @@
-from collections import Counter
-import math
-from entropia_i_info import obliczenie_entropii, oblicz_info_atrybutu, obliczenie_przyrostu, gainratio
+from funkcje_lista import *
+from buduj_drzewo import *
 
-# Wczytaj dane z pliku tekstowego
-nazwa_pliku = "gielda.txt"
 
-with open(nazwa_pliku, 'r') as plik:
-    linie = plik.readlines()
+def wybierz_najlepszy_atrybut(dane):
+    najlepszy_gainratio = 0
+    najlepszy_atrybut = None
+    entropia = obliczenie_entropii1(dane, -1)  # entropia dla całego zbioru danych
+    decyzje = [row[-1] for row in dane]  # decyzje z ostatniej kolumny
 
-# wstawia pierwszy wiersz jako naglowki kolumn
-linie.insert(0, "a1,a2,a3,a4\n")
+    for idx in range(len(dane[0]) - 1):  # Iteruj po indeksach kolumn, pomijając ostatnią (decyzje)
+        kolumna = [row[idx] for row in dane]  # kolumna odpowiadającą bieżącemu atrybutowi
+        info_atrybutu = oblicz_info_atrybutu1(kolumna, decyzje)  
+        przyrost = obliczenie_przyrostu(entropia, info_atrybutu)  
+        
+        splitinfo = obliczenie_entropii1(dane, idx)  
+        
+        ratio = gainratio(przyrost, splitinfo)
 
-# Rozdziel dane na wiersze i kolumny - tworzy listę dane zawierającą wiersze, gdzie każdy wiersz jest listą kolumn
-dane = [wiersz.strip().split(',') for wiersz in linie]
+        if ratio > najlepszy_gainratio:
+            najlepszy_gainratio = ratio
+            najlepszy_atrybut = idx
 
-ind = 0
-atr = 0
-diction = {}
-for i in dane[0]:
-    ind = dane[0].index(i)
-    atr = [wiersz[ind] for wiersz in dane[1:]]
-    diction[f'a{ind + 1}'] = atr
+    return najlepszy_atrybut
 
-# print(diction)
-
-def build_decision_tree(data, attributes, decisions):
-    # Jeśli wszystkie decyzje są takie same, zwracamy liść z tą decyzją
-    if len(set(decisions)) == 1:
-        return decisions[0]
-
-    # Jeśli brak atrybutów lub osiągnięto warunek zakończenia, zwracamy najczęstszą decyzję
-    if not attributes or len(data) < 2:
-        return Counter(decisions).most_common(1)[0][0]
-
-    best_attribute = None
-    best_gain_ratio = -float('inf')
+def podziel_dane(dane, indeks_atrybutu):
+    podzielone_dane = {}
     
-    # Obliczamy entropię dla całego zbioru decyzji
-    total_entropy = obliczenie_entropii(decisions)
-
-    for attribute_index in range(len(attributes)):
-        attribute_values = [row[attribute_index] for row in data]
-        # Obliczamy informację o atrybucie
-        attribute_info = oblicz_info_atrybutu(attribute_values, decisions)
-        # Obliczamy przyrost informacji
-        gain = obliczenie_przyrostu(total_entropy, attribute_info)
-        
-        # Obliczamy split info dla współczynnika Gain Ratio
-        split_info = obliczenie_entropii(attribute_values)
-        
-        # Obliczamy gain ratio
-        gain_ratio = gainratio(gain, split_info)
-        
-        if gain_ratio > best_gain_ratio:
-            best_gain_ratio = gain_ratio
-            best_attribute = attribute_index
-
-    # Podział danych na podzbiory na podstawie najlepszego atrybutu
-    best_attribute_values = [row[best_attribute] for row in data]
-    unique_attribute_values = set(best_attribute_values)
+    for wiersz in dane:
+        wartosc_atrybutu = wiersz[indeks_atrybutu]
+        if wartosc_atrybutu not in podzielone_dane:
+            podzielone_dane[wartosc_atrybutu] = []
+        podzielone_dane[wartosc_atrybutu].append(wiersz)
     
-    subtree = {}
-    for value in unique_attribute_values:
-        new_data = []
-        new_decisions = []
-        new_attributes = attributes[:]
-        for i in range(len(data)):
-            if data[i][best_attribute] == value:
-                new_data.append(data[i][:best_attribute] + data[i][best_attribute + 1:])
-                new_decisions.append(decisions[i])
-        subtree[value] = build_decision_tree(new_data, new_attributes, new_decisions)
+    return podzielone_dane #list(podzielone_dane.values())
 
-    return {f'a{best_attribute + 1}': subtree}
+def buduj_wezel(dane, wezel):
+    najlepszy_atrybut_indeks = wybierz_najlepszy_atrybut(dane)
+    print(najlepszy_atrybut_indeks)
+    if najlepszy_atrybut_indeks == None:
+        decyzja = dane[0][-1]
+        wezel["D:"] = decyzja
+        return None
+    
+    podzielone_dane = podziel_dane(dane, najlepszy_atrybut_indeks)
+    wezel[najlepszy_atrybut_indeks] = {}
+    print(wezel)
 
-def print_decision_tree(decision_tree, indent=''):
-    if isinstance(decision_tree, dict):
-        attribute = next(iter(decision_tree))
-        print(indent + f"Atrybut: {attribute}")
-        for key, subtree in decision_tree[attribute].items():
-            print(indent + f"          {key} -> ", end='')
-            print_decision_tree(subtree, indent + "       ")
+    for atrybut in podzielone_dane:
+        wezel[najlepszy_atrybut_indeks][atrybut] = {}
+        dane = podzielone_dane[atrybut]
+        buduj_wezel(dane, wezel[najlepszy_atrybut_indeks][atrybut])
+
+def buduj_wezel2(dane):
+    wezel = {}
+    najlepszy_atrybut_indeks = wybierz_najlepszy_atrybut(dane)
+    if najlepszy_atrybut_indeks == None:
+        decyzja = dane[0][-1]
+        wezel = decyzja
     else:
-        print(f"D: {decision_tree}")
+        podzielone_dane = podziel_dane(dane, najlepszy_atrybut_indeks)
+        wezel[najlepszy_atrybut_indeks] = {} 
 
-# Tworzymy drzewo decyzyjne
-decision_tree = build_decision_tree(dane[1:], list(range(len(dane[0]) - 1)), diction['a4'])
+        for atrybut in podzielone_dane:
+            dane = podzielone_dane[atrybut]
+            wezel[najlepszy_atrybut_indeks][atrybut] = buduj_wezel2(dane)
+    return wezel
 
-# Wyświetlamy drzewo decyzyjne
-print_decision_tree(decision_tree)
+# dane = wczytaj_dane1("car.data")
+dane = wczytaj_dane1("gielda.txt")
+
+drzewo = buduj_wezel2(dane)
+
+w = buduj(drzewo)
+wyswietl_drzewo(w, 0)
+

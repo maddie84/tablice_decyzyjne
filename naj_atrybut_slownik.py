@@ -30,3 +30,7 @@ def wybierz_najlepszy_atrybut(dane, decyzje, atrybuty):
             najlepszy_atrybut = atrybut
 
     return najlepszy_atrybut
+
+wybrany_atrybut = wybierz_najlepszy_atrybut(dane, decyzje, atrybuty)
+print(wybrany_atrybut)
+

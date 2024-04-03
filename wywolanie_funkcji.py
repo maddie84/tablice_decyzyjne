@@ -1,12 +1,10 @@
 from prettytable import PrettyTable
-from entropia_i_info import obliczenie_entropii, oblicz_info_atrybutu, obliczenie_przyrostu, gainratio
+from entropia_i_info import *
 
-# Wczytaj dane z pliku tekstowego
-nazwa_pliku = "gielda.txt"
 
-with open(nazwa_pliku, 'r') as plik:
+with open("gielda.txt", 'r') as plik:
     linie = plik.readlines()
-
+        
 # wstawia pierwszy wiersz jako naglowki kolumn
 linie.insert(0, "a1,a2,a3,a4\n")
 
@@ -17,6 +15,7 @@ dane = [wiersz.strip().split(',') for wiersz in linie]
 diction = {}
 for i, kolumna in enumerate(dane[0]):
     diction[f'a{i + 1}'] = [wiersz[i] for wiersz in dane[1:]]
+
 
 entropia = obliczenie_entropii(diction['a4'])
 print(f"\nEntropia: {entropia:.4f}")
