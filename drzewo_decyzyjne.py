@@ -34,24 +34,7 @@ def podziel_dane(dane, indeks_atrybutu):
     
     return podzielone_dane
 
-def buduj_wezel(dane, wezel):
-    najlepszy_atrybut_indeks = wybierz_najlepszy_atrybut(dane)
-    print(najlepszy_atrybut_indeks)
-    if najlepszy_atrybut_indeks == None:
-        decyzja = dane[0][-1]
-        wezel["D:"] = decyzja
-        return None
-    
-    podzielone_dane = podziel_dane(dane, najlepszy_atrybut_indeks)
-    wezel[najlepszy_atrybut_indeks] = {}
-    print(wezel)
-
-    for atrybut in podzielone_dane:
-        wezel[najlepszy_atrybut_indeks][atrybut] = {}
-        dane = podzielone_dane[atrybut]
-        buduj_wezel(dane, wezel[najlepszy_atrybut_indeks][atrybut])
-
-def buduj_wezel2(dane):
+def buduj_wezel(dane):
     wezel = {}
     najlepszy_atrybut_indeks = wybierz_najlepszy_atrybut(dane)
     if najlepszy_atrybut_indeks == None:
@@ -63,13 +46,13 @@ def buduj_wezel2(dane):
 
         for atrybut in podzielone_dane:
             dane = podzielone_dane[atrybut]
-            wezel[najlepszy_atrybut_indeks][atrybut] = buduj_wezel2(dane)
+            wezel[najlepszy_atrybut_indeks][atrybut] = buduj_wezel(dane)
     return wezel
 
 # dane = wczytaj_dane1("car.data")
-dane = wczytaj_dane1("gielda.txt")
+dane = wczytaj_dane1("testowaTabDec.txt")
 
-drzewo = buduj_wezel2(dane)
+drzewo = buduj_wezel(dane)
 
 w = buduj(drzewo)
 wyswietl_drzewo(w, 0)

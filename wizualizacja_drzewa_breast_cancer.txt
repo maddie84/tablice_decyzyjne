@@ -1,0 +1,191 @@
+Atrybut 5
+    no -> Atrybut 4
+        0-2 -> Atrybut 3
+            30-34 -> Atrybut 0
+                no-recurrence-events -> Atrybut 6
+                    3 -> no
+                    1 -> no
+                    2 -> Atrybut 8
+                        left_low -> no
+                        left_up -> Atrybut 1
+                            30-39 -> no
+                            60-69 -> no
+                            40-49 -> yes
+                        right_low -> no
+                        right_up -> yes
+                recurrence-events -> Atrybut 8
+                    ? -> no
+                    right_up -> no
+                    central -> no
+                    left_up -> Atrybut 1
+                        30-39 -> no
+                        50-59 -> yes
+                        60-69 -> yes
+                    left_low -> yes
+            20-24 -> Atrybut 6
+                2 -> no
+                1 -> no
+                3 -> Atrybut 2
+                    ge40 -> no
+                    premeno -> Atrybut 8
+                        central -> no
+                        left_low -> yes
+                        left_up -> yes
+            15-19 -> Atrybut 8
+                left_up -> Atrybut 1
+                    60-69 -> Atrybut 7
+                        right -> Atrybut 6
+                            2 -> no
+                            1 -> no
+                            3 -> yes
+                        left -> yes
+                    30-39 -> no
+                    40-49 -> no
+                left_low -> no
+                central -> no
+                right_low -> no
+                right_up -> no
+            0-4 -> no
+            25-29 -> Atrybut 1
+                50-59 -> Atrybut 0
+                    no-recurrence-events -> no
+                    recurrence-events -> Atrybut 6
+                        2 -> no
+                        1 -> no
+                        3 -> yes
+                30-39 -> no
+                40-49 -> Atrybut 2
+                    premeno -> Atrybut 8
+                        left_up -> Atrybut 0
+                            no-recurrence-events -> Atrybut 6
+                                2 -> Atrybut 7
+                                    left -> no
+                                    right -> no
+                                3 -> yes
+                            recurrence-events -> no
+                        left_low -> Atrybut 6
+                            2 -> Atrybut 7
+                                right -> no
+                                left -> yes
+                            1 -> yes
+                        right_low -> no
+                        central -> no
+                        right_up -> no
+                    ge40 -> no
+                60-69 -> Atrybut 8
+                    left_up -> no
+                    left_low -> no
+                    right_low -> yes
+            50-54 -> Atrybut 7
+                left -> no
+                right -> Atrybut 6
+                    1 -> no
+                    2 -> yes
+                    3 -> no
+            10-14 -> Atrybut 6
+                1 -> no
+                3 -> no
+                2 -> Atrybut 1
+                    40-49 -> Atrybut 7
+                        left -> Atrybut 8
+                            left_low -> no
+                            left_up -> no
+                        right -> no
+                    50-59 -> no
+                    70-79 -> no
+                    60-69 -> Atrybut 7
+                        right -> yes
+                        left -> no
+                    30-39 -> no
+            40-44 -> Atrybut 1
+                50-59 -> no
+                40-49 -> no
+                70-79 -> no
+                30-39 -> Atrybut 8
+                    right_up -> no
+                    left_low -> yes
+                    left_up -> no
+                60-69 -> no
+            35-39 -> no
+            5-9 -> Atrybut 1
+                60-69 -> no
+                50-59 -> no
+                30-39 -> no
+                40-49 -> yes
+            45-49 -> yes
+        6-8 -> Atrybut 8
+            left_up -> no
+            left_low -> yes
+        3-5 -> Atrybut 3
+            20-24 -> Atrybut 0
+                no-recurrence-events -> no
+                recurrence-events -> yes
+            40-44 -> yes
+            25-29 -> Atrybut 0
+                no-recurrence-events -> yes
+                recurrence-events -> no
+            10-14 -> no
+            30-34 -> Atrybut 1
+                40-49 -> no
+                30-39 -> yes
+                50-59 -> no
+        15-17 -> no
+        12-14 -> yes
+        9-11 -> yes
+    yes -> Atrybut 4
+        6-8 -> Atrybut 3
+            30-34 -> Atrybut 0
+                no-recurrence-events -> no
+                recurrence-events -> Atrybut 6
+                    3 -> no
+                    2 -> yes
+            25-29 -> yes
+            45-49 -> no
+            15-19 -> yes
+            35-39 -> no
+            10-14 -> yes
+            40-44 -> yes
+        0-2 -> Atrybut 3
+            25-29 -> no
+            35-39 -> yes
+            20-24 -> no
+            50-54 -> yes
+            15-19 -> Atrybut 0
+                no-recurrence-events -> yes
+                recurrence-events -> no
+            30-34 -> Atrybut 1
+                40-49 -> no
+                60-69 -> yes
+        9-11 -> Atrybut 0
+            no-recurrence-events -> yes
+            recurrence-events -> Atrybut 2
+                premeno -> no
+                ge40 -> yes
+        3-5 -> Atrybut 2
+            premeno -> Atrybut 6
+                3 -> yes
+                2 -> Atrybut 3
+                    20-24 -> Atrybut 7
+                        left -> Atrybut 1
+                            50-59 -> no
+                            30-39 -> no
+                            40-49 -> yes
+                        right -> yes
+                    30-34 -> Atrybut 1
+                        50-59 -> yes
+                        40-49 -> no
+                    25-29 -> yes
+            ge40 -> Atrybut 8
+                left_low -> no
+                left_up -> no
+                right_up -> no
+                central -> yes
+        15-17 -> Atrybut 6
+            3 -> no
+            2 -> yes
+        12-14 -> yes
+        24-26 -> yes
+    ? -> Atrybut 2
+        premeno -> yes
+        ge40 -> yes
+        lt40 -> no
